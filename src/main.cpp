@@ -28,14 +28,16 @@ String LoRaData;
 
 struct __attribute__((__packed__)) dataStruct
 {
-  int grimmValues[31];
   int partectorNumber;  // Parts/cm³
   int partectorDiam;    // nm
   float partectorMass;  // µg/m³
+  float grimmValue;      // Particles/cm³
   float temperature;    // °C
   float humidity;       // %
   float pressure;       // hPa
   float altitude;       // m
+  float latitude;       // °
+  float longitude;      // °
   uint16_t co2;         // ppm
 }data;
 
@@ -106,24 +108,28 @@ void loop() {
     display.clearDisplay();
     display.setCursor(0,0);
     display.print("Partector No.:");
-    display.setCursor(0,20);
+    display.setCursor(0,10);
     display.print(data.partectorNumber);
-    display.setCursor(0,30);
+    display.setCursor(0,20);
     display.print("RSSI:");
-    display.setCursor(30,30);
+    display.setCursor(30,20);
     display.print(rssi);
-    display.setCursor(0,40);
+    display.setCursor(0,30);
     display.print("T: ");
-    display.setCursor(30,40);
+    display.setCursor(30,30);
     display.print(data.temperature);
-    display.setCursor(0,50);
+    display.setCursor(0,40);
     display.print("CO: ");
-    display.setCursor(30,50);
+    display.setCursor(30,40);
     display.print(data.co2);
+    display.setCursor(0,50);
+    display.print("Grimm:");
+    display.setCursor(35,50);
+    display.print(data.grimmValue);
     display.display();   
 
     Serial.write('<');
-    Serial.write((const char*) &data, sizeof(data));
+    Serial.write((uint8_t*) &data, sizeof(data));
     Serial.write('>');
   }
 }
